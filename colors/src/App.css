@@ -14,25 +14,83 @@
 }
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
+  padding-top: 3rem;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.background {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.blank {
+  opacity: 0;
+  transition: 0.4s;
+}
+
+.button {
+  background-color: #E84A8C;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 4rem;
+  cursor: pointer;
+  transition: 0.4s;
+  font-size: 1.3rem;
+}
+
+.buttonWhite {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+}
+
+.buttonBlack {
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+.btnContainer {
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  width: 95%;
+  z-index: 2;
+}
+
+.colorSwatchesContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 20rem;
+  width: 95%;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 0.5px solid rgb(180, 180, 180);
+  z-index: 2;
+}
+
+.generateColorsBtn {
+  padding: 1rem 15rem;
+}
+
+.light {
+  background-color: #ffffff;
+  color: #1E1E1E;
+  transition: 0.4s;
+}
+
+.dark {
+  background-color: #1E1E1E;
+  color: #fff5f5;
+  transition: 0.4s;
 }

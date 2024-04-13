@@ -1,0 +1,13 @@
+.colorContainer {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    height: 100%;
+    width: 100%;
+    background-color: pink;
+    font-size: 1.5rem;
+}
+
+.colorHex {
+    cursor: pointer;
+}
