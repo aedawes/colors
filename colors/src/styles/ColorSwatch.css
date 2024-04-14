@@ -11,3 +11,16 @@
 .colorHex {
     cursor: pointer;
 }
+
+.infoContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon {
+    cursor: pointer;
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+}
