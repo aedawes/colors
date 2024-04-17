@@ -6,8 +6,9 @@ nav {
     padding-right: 2rem;
     font-family: 'Questrial', sans-serif;
     font-size: 1.2rem;
-    color: #1E1E1E;
-    background: linear-gradient(to right, #E84A8C, #FFBBCC)
+    color: #5579c8;
+    background: linear-gradient(to right, #f9f9f9, rgb(197, 198, 227));
+    border-bottom: 0.1rem solid #5579c8;
 }
 
 .dark-toggle {
@@ -23,7 +24,7 @@ nav {
     justify-content: end;
     align-items: center;
     padding-right: 0.4rem;
-    color: #E84A8C;
+    color: #5579c8;
 }
 
 .switch {
@@ -60,7 +61,7 @@ nav {
     width: 26px;
     left: 4px;
     bottom: 4px;
-    background-color: #E84A8C;
+    background-color: #5579c8;
     border-radius: 34px;
     transition: 0.4s;
 }

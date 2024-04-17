@@ -2,18 +2,7 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
+.content {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -30,7 +19,7 @@
 }
 
 .button {
-  background-color: #E84A8C;
+  background-color: #5579c8;
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -40,6 +29,13 @@
   cursor: pointer;
   transition: 0.4s;
   font-size: 1.3rem;
+}
+
+.buttonOutline {
+  background-color: transparent;
+  color: #5579c8;
+  width: 100%;
+  border: 1px solid #5579c8;
 }
 
 .buttonWhite {
@@ -65,16 +61,22 @@
   width: 100%;
 }
 
-.btnContainer {
+.topButtonsContainer {
   display: flex;
   justify-content: space-between;
-  width: 95%;
+  width: 100%;
   gap: 1%;
   z-index: 2;
 }
 
+.btnContainer {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+}
+
 .colorSwatchesContainer {
-  margin: 2.5rem 0 1.8rem 0;
+  margin: 4rem 0 4rem 0;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -94,6 +96,33 @@
 
 .generateColorsBtn {
   width: 100%;
+}
+
+.grid-container {
+  display: grid;
+  justify-content: space-between;
+  align-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 2%;
+  padding: 0 0 10% 0;
+  height: fit-content;
+  width: 95%;
+  margin: 4rem 0 4rem 0;
+  opacity: 0;
+  transition: 0.4s;
+}
+
+.grid-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: min-content;
+  border-radius: 0.5rem;
+  border: 0.1rem solid;
+}
+
+.contrastAnimation {
+  opacity: 1;
 }
 
 .light {

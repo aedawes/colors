@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import Navbar from './components/Navbar';
 import ColorSwatch from './components/ColorSwatch';
+import ContrastCard from './components/ContrastCard';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -10,16 +11,41 @@ function App() {
   const [blackBackground, setBlackBackground] = useState(false);
   const [buttonIsFullSize, setButtonIsFullSize] = useState(false);
   const [isSmall, setIsSmall] = useState(false);
+  const [showContrast, setShowContrast] = useState(false);
+  const [showContrastAnimation, setShowContrastAnimation] = useState(false);
 
   const colorSwatchContainerWidthRef = useRef(null);
 
-  const darkModeClass = isDarkMode ? 'App-header dark' : 'App-header light';
+  const darkModeClass = isDarkMode ? 'content dark' : 'content light';
 
   useEffect(() => {
     //This hook initializes the colors state
     initializeColours();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    //This hook is used to animate the opening of contrast checker
+    if (showContrast) {
+      setTimeout(() => {
+        setShowContrastAnimation(true);
+      }, 200);
+    }
+  }, [showContrast]);
+
+  useEffect(() => {
+    //This hook is used to animate the closing of contrast checker
+    if (!showContrastAnimation) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      setTimeout(() => {
+        setShowContrast(false);
+        //longer wait to allow for scroll to top
+      }, 550);
+    }
+  }, [showContrastAnimation]);
 
   useEffect(() => {
     //This hook implements the update of the css propeties when the colors state changes
@@ -31,6 +57,7 @@ function App() {
   }, [colors]);
 
   const initializeColours = () => {
+    //This function initializes the colors state when first entering the app
     let colorArray = [];
 
     for (let i = 0; i < 5; i++) {
@@ -50,7 +77,7 @@ function App() {
 
       const colorWidth = colorSwatchContainerWidthRef.current.offsetWidth;
       const colorSwatchContainer = colorSwatchContainerWidthRef.current;
-      const buttonsContainer = document.getElementsByClassName('btnContainer')[0];
+      const buttonsContainer = document.getElementsByClassName('topButtonsContainer')[0];
       const buttons = document.getElementsByClassName('button');
       const infoContainer = document.getElementsByClassName('infoContainer');
 
@@ -177,6 +204,14 @@ function App() {
     });
   };
 
+  const handleShowContrast = () => {
+    if (showContrastAnimation === true) {
+      setShowContrastAnimation(false);
+    } else {
+      setShowContrast(true);
+    }
+  }
+
   return (
     <div className="App">
       {(whiteBackground || blackBackground) ?
@@ -199,21 +234,40 @@ function App() {
           )}
         </div>
         <div className="btnContainer">
-          <button className={calculateButtonClass('generateColorsBtn')} onClick={handleRegenerationOfColors}>Generate Colors</button>
-          <button className={calculateButtonClass()} onClick={handleAddColor}>Add Color</button>
-          {!blackBackground ?
-            <button className={calculateButtonClass()} onClick={() => setWhiteBackground(!whiteBackground)}>See on White Background</button>
-            :
-            //placeholder to keep spacing
-            <button className='button blank'>See on White Background</button>
-          }
-          {!whiteBackground ?
-            <button className={calculateButtonClass()} onClick={() => setBlackBackground(!blackBackground)}>See on Black Background</button>
-            :
-            //placeholder to keep spacing
-            <button className='button blank'>See on Black Background</button>
-          }
+          <div className='topButtonsContainer'>
+            <button className={calculateButtonClass('generateColorsBtn')} onClick={handleRegenerationOfColors}>Generate Colors</button>
+            <button className={calculateButtonClass()} onClick={handleAddColor}>Add Color</button>
+            {!blackBackground ?
+              <button className={calculateButtonClass()} onClick={() => setWhiteBackground(!whiteBackground)}>See on White Background</button>
+              :
+              //placeholder to keep spacing
+              <button className='button blank'>See on White Background</button>
+            }
+            {!whiteBackground ?
+              <button className={calculateButtonClass()} onClick={() => setBlackBackground(!blackBackground)}>See on Black Background</button>
+              :
+              //placeholder to keep spacing
+              <button className='button blank'>See on Black Background</button>
+            }
+          </div>
+          <button className='button buttonFullSize buttonOutline' onClick={() => handleShowContrast()}>Check Contrast</button>
         </div>
+        {showContrast ?
+          <div className={`grid-container ${showContrastAnimation ? 'contrastAnimation' : ''}`}>
+            {colors.map((color1, i) => (
+              colors.map((color2, j) => (
+                i !== j ?
+                  (
+                    <div className='grid-item'>
+                      <ContrastCard key={`${color1.hex}-${color2.hex}`} color1={color1.hex} color2={color2.hex} />
+                    </div>
+                  )
+                  : null
+              ))
+            ))}
+          </div>
+          : null
+        }
       </div>
     </div>
   );
