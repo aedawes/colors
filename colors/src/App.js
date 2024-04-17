@@ -51,9 +51,6 @@ function App() {
     //This hook implements the update of the css propeties when the colors state changes
     handleResize();
     window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
   }, [colors]);
 
   const initializeColours = () => {
@@ -250,19 +247,15 @@ function App() {
               <button className='button blank'>See on Black Background</button>
             }
           </div>
-          <button className='button buttonFullSize buttonOutline' onClick={() => handleShowContrast()}>Check Contrast</button>
+          <button className='button buttonFullSize buttonLong' onClick={() => handleShowContrast()}>Check Contrast</button>
         </div>
         {showContrast ?
-          <div className={`grid-container ${showContrastAnimation ? 'contrastAnimation' : ''}`}>
+          <div className={`${isSmall ? 'mobile-container' : 'grid-container'} ${showContrastAnimation ? 'contrastAnimation' : ''}`}>
             {colors.map((color1, i) => (
-              colors.map((color2, j) => (
-                i !== j ?
-                  (
-                    <div className='grid-item'>
-                      <ContrastCard key={`${color1.hex}-${color2.hex}`} color1={color1.hex} color2={color2.hex} />
-                    </div>
-                  )
-                  : null
+              colors.slice(i + 1).map((color2, j) => (
+                <div className={`${isSmall ? 'mobile-item' : 'grid-item'}`}>
+                  <ContrastCard key={`${color1.hex}-${color2.hex}`} color1={color1.hex} color2={color2.hex} />
+                </div>
               ))
             ))}
           </div>

@@ -31,11 +31,13 @@
   font-size: 1.3rem;
 }
 
-.buttonOutline {
-  background-color: transparent;
-  color: #5579c8;
+.button:hover {
+  background-color: #92ade9;
+  color: #ffffff;
+}
+
+.buttonLong {
   width: 100%;
-  border: 1px solid #5579c8;
 }
 
 .buttonWhite {
@@ -76,7 +78,7 @@
 }
 
 .colorSwatchesContainer {
-  margin: 4rem 0 4rem 0;
+  margin: 2rem 0 2rem 0;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -107,7 +109,7 @@
   padding: 0 0 10% 0;
   height: fit-content;
   width: 95%;
-  margin: 4rem 0 4rem 0;
+  margin: 2rem 0 2rem 0;
   opacity: 0;
   transition: 0.4s;
 }
@@ -117,6 +119,21 @@
   justify-content: center;
   align-items: center;
   min-width: min-content;
+  border-radius: 0.5rem;
+  border: 0.1rem solid;
+}
+
+.mobile-container {
+  margin: 1rem 0 1rem 0;
+  width: 95%;
+}
+
+.mobile-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 1rem 0;
   border-radius: 0.5rem;
   border: 0.1rem solid;
 }
