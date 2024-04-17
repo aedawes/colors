@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import Navbar from './components/Navbar';
 import ColorSwatch from './components/ColorSwatch';
@@ -8,6 +8,8 @@ function App() {
   const [colors, setColors] = useState([]);
   const [whiteBackground, setWhiteBackground] = useState(false);
   const [blackBackground, setBlackBackground] = useState(false);
+  const [isSmall, setIsSmall] = useState(false);
+  const colorSwatchContainerWidthRef = useRef(null);
 
   const darkModeClass = isDarkMode ? 'App-header dark' : 'App-header light';
 
@@ -15,6 +17,14 @@ function App() {
     initializeColours();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [colors]);
 
   const initializeColours = () => {
     let colorArray = [];
@@ -25,6 +35,45 @@ function App() {
 
     setColors(colorArray);
   }
+
+  const handleResize = () => {
+    //for smaller screen size
+    if (colorSwatchContainerWidthRef.current) {
+
+      const colorWidth = colorSwatchContainerWidthRef.current.offsetWidth;
+      const colorSwatchContainer = colorSwatchContainerWidthRef.current;
+      const buttonsContainer = document.getElementsByClassName('btnContainer')[0];
+      const buttonsWidth = document.getElementsByClassName('button');
+      const infoContainer = document.getElementsByClassName('infoContainer');
+
+      if (colorWidth <= 650) {
+        setIsSmall(true);
+        colorSwatchContainer.classList.add('columnLayout');
+        buttonsContainer.classList.add('buttonsColumnLayout');
+
+        for (let i = 0; i < buttonsWidth.length; i++) {
+          buttonsWidth[i].classList.add('buttonFullSize');
+        }
+
+        for (let i = 0; i < infoContainer.length; i++) {
+          infoContainer[i].classList.add('infoContainerMobile');
+        }
+
+      } else {
+        setIsSmall(false);
+        colorSwatchContainer.classList.remove('columnLayout');
+        buttonsContainer.classList.remove('buttonsColumnLayout');
+
+        for (let i = 0; i < buttonsWidth.length; i++) {
+          buttonsWidth[i].classList.remove('buttonFullSize');
+        }
+
+        for (let i = 0; i < infoContainer.length; i++) {
+          infoContainer[i].classList.remove('infoContainerMobile');
+        }
+      }
+    }
+  };
 
   const handleAddColor = () => {
     if (colors.length < 8) {
@@ -45,7 +94,14 @@ function App() {
   }
 
   const generateRandomColor = () => {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    let newColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+
+    //ensure no duplicate colors
+    while (colors.length > 0 && colors.includes(newColor)) {
+      newColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    }
+
+    return newColor;
   }
 
   const calculateButtonClass = (buttonType) => {
@@ -58,8 +114,6 @@ function App() {
     if (buttonType === 'generateColorsBtn') {
       buttonClass += ' generateColorsBtn';
     }
-
-    console.log(buttonClass);
     return buttonClass;
   }
 
@@ -71,10 +125,10 @@ function App() {
       }
       <Navbar isDarkMode={isDarkMode} onToggleDarkMode={() => setIsDarkMode(!isDarkMode)} />
       <div className={darkModeClass}>
-        <div className='colorSwatchesContainer'>
+        <div ref={colorSwatchContainerWidthRef} className='colorSwatchesContainer'>
           {colors.map((color, index) =>
-            <ColorSwatch key={index} color={color}
-            />)}
+            <ColorSwatch key={index} color={color} isSmall={isSmall} />
+          )}
         </div>
         <div className="btnContainer">
           <button className={calculateButtonClass('generateColorsBtn')} onClick={handleRegenerationOfColors}>Generate Colors</button>
