@@ -9,16 +9,19 @@ function App() {
   const [whiteBackground, setWhiteBackground] = useState(false);
   const [blackBackground, setBlackBackground] = useState(false);
   const [isSmall, setIsSmall] = useState(false);
+
   const colorSwatchContainerWidthRef = useRef(null);
 
   const darkModeClass = isDarkMode ? 'App-header dark' : 'App-header light';
 
   useEffect(() => {
+    //This hook initializes the colors state
     initializeColours();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
+    //This hook implements the update of the css propeties when the colors state changes
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => {
@@ -30,13 +33,17 @@ function App() {
     let colorArray = [];
 
     for (let i = 0; i < 5; i++) {
-      colorArray.push(generateRandomColor());
+      colorArray.push({
+        hex: generateRandomColor(),
+        locked: false
+      });
     }
 
     setColors(colorArray);
   }
 
   const handleResize = () => {
+    //This functon changes CSS properties based on size of color container
     //for smaller screen size
     if (colorSwatchContainerWidthRef.current) {
 
@@ -76,35 +83,56 @@ function App() {
   };
 
   const handleAddColor = () => {
+    //This function adds a color to the palette 
     if (colors.length < 8) {
-      setColors([...colors, generateRandomColor()]);
+      const newColor = {
+        hex: generateRandomColor(),
+        locked: false
+      }
+      setColors([...colors, newColor]);
     } else {
       alert('You can only have a maximum of 8 colors');
     }
   }
 
   const handleRegenerationOfColors = () => {
+    //This function runs when the 'Generate Colors' button is clicked
     let colorArray = [];
 
     for (let i = 0; i < colors.length; i++) {
-      colorArray.push(generateRandomColor());
+      if (colors[i].locked) {
+        colorArray.push(colors[i]);
+      } else {
+        colorArray.push({
+          hex: generateRandomColor(),
+          locked: false
+        });
+      }
     }
 
     setColors(colorArray);
   }
 
   const generateRandomColor = () => {
+    //This helpter function generates a random color
     let newColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    while (newColor.length < 7) {
+      newColor += '0';
+    }
 
     //ensure no duplicate colors
     while (colors.length > 0 && colors.includes(newColor)) {
       newColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+      while (newColor.length < 7) {
+        newColor += '0';
+      }
     }
 
     return newColor;
   }
 
   const calculateButtonClass = (buttonType) => {
+    //This function helps to build the class for the buttons
     let buttonClass = 'button';
     if (whiteBackground) {
       buttonClass += ' buttonWhite';
@@ -117,6 +145,24 @@ function App() {
     return buttonClass;
   }
 
+  const handleLockColor = (color) => {
+    //This function locks a color
+    const updatedColors = colors.map(c => {
+      if (c.hex === color.hex) {
+        return { ...c, locked: !c.locked }
+      }
+      return c;
+    });
+
+    setColors(updatedColors);
+  }
+
+  const handleDeleteColor = (color) => {
+    //This function deletes a color
+    const updatedColors = colors.filter(c => c.hex !== color.hex);
+    setColors(updatedColors);
+  }
+
   return (
     <div className="App">
       {(whiteBackground || blackBackground) ?
@@ -127,7 +173,14 @@ function App() {
       <div className={darkModeClass}>
         <div ref={colorSwatchContainerWidthRef} className='colorSwatchesContainer'>
           {colors.map((color, index) =>
-            <ColorSwatch key={index} color={color} isSmall={isSmall} />
+            <ColorSwatch
+              key={index}
+              color={color}
+              isSmall={isSmall}
+              lockClick={() => handleLockColor(color)}
+              deleteClick={() => handleDeleteColor(color)}
+              showDelete={colors.length > 2}
+            />
           )}
         </div>
         <div className="btnContainer">

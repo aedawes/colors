@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import '../styles/ColorSwatch.css';
 import Icon from '@mdi/react';
 import { mdiCloseCircleOutline, mdiLock, mdiLockOpenOutline } from '@mdi/js';
 import { calculateContrastRatio } from '../ColorContrast';
 
-export default function ColorSwatch({ color, isSmall }) {
-    const [locked, setLocked] = useState(false);
+export default function ColorSwatch({ color, isSmall, lockClick, deleteClick, showDelete }) {
     const colorSwatchWidthRef = useRef(null);
 
     useEffect(() => {
@@ -29,7 +28,7 @@ export default function ColorSwatch({ color, isSmall }) {
     };
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(color)
+        navigator.clipboard.writeText(color.hex)
             .then(() => {
                 alert('Color Copied!');
             })
@@ -38,30 +37,31 @@ export default function ColorSwatch({ color, isSmall }) {
             });
     };
 
-    const textColor = calculateContrastRatio(color, '#ffffff') > 4.5 ? '#ffffff' : '#000000';
+    const textColor = calculateContrastRatio(color.hex, '#ffffff') > 4.5 ? '#ffffff' : '#000000';
+    const deleteClass = showDelete ? 'icon' : 'icon blank';
 
     return (
-        <div className='colorContainer' style={{ backgroundColor: color, color: textColor }}>
+        <div className='colorContainer' style={{ backgroundColor: color.hex, color: textColor }}>
             {isSmall ? (
                 <div ref={colorSwatchWidthRef} className='infoContainer'>
-                    <p className='colorHex' onClick={handleCopy} >{color}</p>
+                    <p className='colorHex' onClick={handleCopy} >{color.hex}</p>
                     <div className='iconContainer'>
-                        <Icon className='icon' path={mdiCloseCircleOutline} size={1} />
-                        {locked ?
-                            <Icon className='icon' onClick={() => setLocked(!locked)} path={mdiLock} size={1} />
+                        <Icon className={deleteClass} onClick={() => deleteClick()} path={mdiCloseCircleOutline} size={1} />
+                        {color.locked ?
+                            <Icon className='icon' onClick={() => lockClick()} path={mdiLock} size={1} />
                             :
-                            <Icon className='icon' onClick={() => setLocked(!locked)} path={mdiLockOpenOutline} size={1} />
+                            <Icon className='icon' onClick={() => lockClick()} path={mdiLockOpenOutline} size={1} />
                         }
                     </div>
                 </div>
             ) : (
                 <div ref={colorSwatchWidthRef} className='infoContainer'>
-                    <Icon className='icon' path={mdiCloseCircleOutline} size={1} />
-                    <p className='colorHex' onClick={handleCopy} >{color}</p>
-                    {locked ?
-                        <Icon className='icon' onClick={() => setLocked(!locked)} path={mdiLock} size={1} />
+                    <Icon className={deleteClass} onClick={() => deleteClick()} path={mdiCloseCircleOutline} size={1} />
+                    <p className='colorHex' onClick={handleCopy} >{color.hex}</p>
+                    {color.locked ?
+                        <Icon className='icon' onClick={() => lockClick()} path={mdiLock} size={1} />
                         :
-                        <Icon className='icon' onClick={() => setLocked(!locked)} path={mdiLockOpenOutline} size={1} />
+                        <Icon className='icon' onClick={() => lockClick()} path={mdiLockOpenOutline} size={1} />
                     }
                 </div>
             )}
