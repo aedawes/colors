@@ -8,6 +8,7 @@ function App() {
   const [colors, setColors] = useState([]);
   const [whiteBackground, setWhiteBackground] = useState(false);
   const [blackBackground, setBlackBackground] = useState(false);
+  const [buttonIsFullSize, setButtonIsFullSize] = useState(false);
   const [isSmall, setIsSmall] = useState(false);
 
   const colorSwatchContainerWidthRef = useRef(null);
@@ -50,16 +51,17 @@ function App() {
       const colorWidth = colorSwatchContainerWidthRef.current.offsetWidth;
       const colorSwatchContainer = colorSwatchContainerWidthRef.current;
       const buttonsContainer = document.getElementsByClassName('btnContainer')[0];
-      const buttonsWidth = document.getElementsByClassName('button');
+      const buttons = document.getElementsByClassName('button');
       const infoContainer = document.getElementsByClassName('infoContainer');
 
-      if (colorWidth <= 650) {
+      if (colorWidth <= 675) {
         setIsSmall(true);
         colorSwatchContainer.classList.add('columnLayout');
         buttonsContainer.classList.add('buttonsColumnLayout');
 
-        for (let i = 0; i < buttonsWidth.length; i++) {
-          buttonsWidth[i].classList.add('buttonFullSize');
+        for (let i = 0; i < buttons.length; i++) {
+          buttons[i].classList.add('buttonFullSize');
+          setButtonIsFullSize(true);
         }
 
         for (let i = 0; i < infoContainer.length; i++) {
@@ -71,8 +73,9 @@ function App() {
         colorSwatchContainer.classList.remove('columnLayout');
         buttonsContainer.classList.remove('buttonsColumnLayout');
 
-        for (let i = 0; i < buttonsWidth.length; i++) {
-          buttonsWidth[i].classList.remove('buttonFullSize');
+        for (let i = 0; i < buttons.length; i++) {
+          buttons[i].classList.remove('buttonFullSize');
+          setButtonIsFullSize(false);
         }
 
         for (let i = 0; i < infoContainer.length; i++) {
@@ -142,6 +145,9 @@ function App() {
     if (buttonType === 'generateColorsBtn') {
       buttonClass += ' generateColorsBtn';
     }
+    if (buttonIsFullSize) {
+      buttonClass += ' buttonFullSize';
+    }
     return buttonClass;
   }
 
@@ -163,6 +169,14 @@ function App() {
     setColors(updatedColors);
   }
 
+  const handleColorChange = (index, newColor) => {
+    setColors(prevColors => {
+      const updatedColors = [...prevColors];
+      updatedColors[index].hex = newColor.hex;
+      return updatedColors;
+    });
+  };
+
   return (
     <div className="App">
       {(whiteBackground || blackBackground) ?
@@ -180,6 +194,7 @@ function App() {
               lockClick={() => handleLockColor(color)}
               deleteClick={() => handleDeleteColor(color)}
               showDelete={colors.length > 2}
+              onColorChange={(newColor) => handleColorChange(index, newColor)}
             />
           )}
         </div>

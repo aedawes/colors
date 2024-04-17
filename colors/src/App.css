@@ -29,11 +29,6 @@
   z-index: 1;
 }
 
-.blank {
-  opacity: 0;
-  transition: 0.4s;
-}
-
 .button {
   background-color: #E84A8C;
   color: #ffffff;
@@ -79,7 +74,7 @@
 }
 
 .colorSwatchesContainer {
-  margin: 2.5rem 0;
+  margin: 2.5rem 0 1.8rem 0;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -111,4 +106,10 @@
   background-color: #1E1E1E;
   color: #fff5f5;
   transition: 0.4s;
+}
+
+.blank {
+  opacity: 0;
+  transition: 0.4s;
+  cursor: default;
 }

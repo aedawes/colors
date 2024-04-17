@@ -1,4 +1,4 @@
-.blank{
+.disappear {
     display: none;
     transition: 0.4s;
 }
@@ -19,6 +19,10 @@
 
 .columnLayout .colorHex {
   order: 1;
+}
+
+.colorPicker {
+    position: absolute;
 }
 
 .iconContainer {
