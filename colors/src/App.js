@@ -3,8 +3,6 @@ import './App.css';
 import Navbar from './components/Navbar';
 import ColorSwatch from './components/ColorSwatch';
 import ContrastCard from './components/ContrastCard';
-import Icon from '@mdi/react';
-import { mdiSwapHorizontal } from '@mdi/js';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
