@@ -3,6 +3,8 @@ import './App.css';
 import Navbar from './components/Navbar';
 import ColorSwatch from './components/ColorSwatch';
 import ContrastCard from './components/ContrastCard';
+import Icon from '@mdi/react';
+import { mdiSwapHorizontal } from '@mdi/js';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -35,6 +37,7 @@ function App() {
 
   useEffect(() => {
     //This hook is used to animate the closing of contrast checker
+    //Trust me, it is different
     if (!showContrastAnimation) {
       window.scrollTo({
         top: 0,
@@ -209,6 +212,17 @@ function App() {
     }
   }
 
+  const handleSwap = (index) => {
+    //This function swaps the color at the given index with the next color
+    if (index < colors.length - 1) {
+      const updatedColors = [...colors];
+      const tempColor = updatedColors[index];
+      updatedColors[index] = updatedColors[index + 1];
+      updatedColors[index + 1] = tempColor;
+      setColors(updatedColors);
+    }
+  }
+
   return (
     <div className="App">
       {(whiteBackground || blackBackground) ?
@@ -219,15 +233,19 @@ function App() {
       <div className={darkModeClass}>
         <div ref={colorSwatchContainerWidthRef} className='colorSwatchesContainer'>
           {colors.map((color, index) =>
-            <ColorSwatch
-              key={index}
-              color={color}
-              isSmall={isSmall}
-              lockClick={() => handleLockColor(color)}
-              deleteClick={() => handleDeleteColor(color)}
-              showDelete={colors.length > 2}
-              onColorChange={(newColor) => handleColorChange(index, newColor)}
-            />
+            <>
+              <ColorSwatch
+                key={index}
+                color={color}
+                isSmall={isSmall}
+                lockClick={() => handleLockColor(color)}
+                deleteClick={() => handleDeleteColor(color)}
+                showDelete={colors.length > 2}
+                onColorChange={(newColor) => handleColorChange(index, newColor)}
+                index={index < colors.length - 1 ? index : null}
+                handleSwap={() => handleSwap(index)}
+              />
+            </>
           )}
         </div>
         <div className="btnContainer">

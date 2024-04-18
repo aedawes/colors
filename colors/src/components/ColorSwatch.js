@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/ColorSwatch.css';
 import Icon from '@mdi/react';
-import { mdiCloseCircleOutline, mdiLock, mdiLockOpenOutline } from '@mdi/js';
+import { mdiCloseCircleOutline, mdiLock, mdiLockOpenOutline, mdiSwapHorizontal, mdiSwapVertical } from '@mdi/js';
 import { calculateContrastRatio } from '../ColorContrast';
 import { SketchPicker } from 'react-color';
 
-export default function ColorSwatch({ color, isSmall, lockClick, deleteClick, showDelete, onColorChange }) {
+export default function ColorSwatch({ color, isSmall, lockClick, deleteClick, showDelete, onColorChange, index, handleSwap }) {
     const [showColorPicker, setShowColorPicker] = useState(false);
 
     const colorSwatchWidthRef = useRef(null);
@@ -92,6 +92,17 @@ export default function ColorSwatch({ color, isSmall, lockClick, deleteClick, sh
                     }
                 </div>
             )}
+            {index !== null ?
+                <button className={`swapBtn ${isSmall ? 'smallScreenSwapButton' : ''}`} onClick={() => handleSwap()}>
+                    {isSmall ?
+                        <Icon path={mdiSwapVertical} color='#5579c8' size={1} />
+                        :
+                        <Icon path={mdiSwapHorizontal} color='#5579c8' size={1} />
+                    }
+                </button>
+                :
+                null
+            }
         </div>
     );
 }

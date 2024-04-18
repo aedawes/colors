@@ -57,3 +57,28 @@
     cursor: pointer;
     margin: 1rem 0;
 }
+
+.swapBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    margin-left: 19%;
+    margin-top: 1.5rem;
+    align-self: center;
+    opacity: 1;
+    background-color: #f2f3f7;
+    padding: 0.1rem 0.2rem;
+    border: 0.1rem solid #5579c8;
+    border-radius: 50rem;
+}
+
+.smallScreenSwapButton {
+    opacity: 1;
+    margin-left: 0;
+    margin-top: 18%;
+}
+
+.swapBtn:hover {
+  opacity: 1;
+}
