@@ -6,6 +6,7 @@ import { calculateContrastRatio } from '../ColorContrast';
 
 export default function ContrastCard({ color1, color2 }) {
 
+    //RENDER------------------------------------------------------------------------------------
     return (
         <div>
             <div className='contrastCardContainer'>
@@ -19,7 +20,11 @@ export default function ContrastCard({ color1, color2 }) {
                 </div>
                 <div className='contrastRatio'>
                     <p>Contrast Ratio: {calculateContrastRatio(color1, color2)}</p>
-                    <Icon path={calculateContrastRatio(color1, color2) > 4.5 ? mdiCheckCircle : mdiCloseCircle} size={1.3} color={calculateContrastRatio(color1, color2) > 4.5 ? '#59AB8F' : '#C75164'} />
+                    <Icon
+                        path={calculateContrastRatio(color1, color2) > 4.5 ? mdiCheckCircle : mdiCloseCircle}
+                        size={1.3}
+                        color={calculateContrastRatio(color1, color2) > 4.5 ? '#59AB8F' : '#C75164'}
+                    />
                 </div>
             </div>
         </div>

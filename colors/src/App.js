@@ -5,6 +5,7 @@ import ColorSwatch from './components/ColorSwatch';
 import ContrastCard from './components/ContrastCard';
 
 function App() {
+  //STATES---------------------------------------------------------------------------------------------------
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [colors, setColors] = useState([]);
   const [whiteBackground, setWhiteBackground] = useState(false);
@@ -14,18 +15,21 @@ function App() {
   const [showContrast, setShowContrast] = useState(false);
   const [showContrastAnimation, setShowContrastAnimation] = useState(false);
 
+  //REFS------------------------------------------------------------------------------------------------------
   const colorSwatchContainerWidthRef = useRef(null);
 
+  //VARIABLES-------------------------------------------------------------------------------------------------
   const darkModeClass = isDarkMode ? 'content dark' : 'content light';
 
+  //EFFECTS--------------------------------------------------------------------------------------------------- 
   useEffect(() => {
-    //This hook initializes the colors state
+    //initializes the colors state
     initializeColours();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    //This hook is used to animate the opening of contrast checker
+    //used to animate the opening of contrast checker
     if (showContrast) {
       setTimeout(() => {
         setShowContrastAnimation(true);
@@ -34,7 +38,7 @@ function App() {
   }, [showContrast]);
 
   useEffect(() => {
-    //This hook is used to animate the closing of contrast checker
+    //used to animate the closing of contrast checker
     //Trust me, it is different
     if (!showContrastAnimation) {
       window.scrollTo({
@@ -54,15 +58,95 @@ function App() {
     window.addEventListener('resize', handleResize);
   }, [colors]);
 
-  const initializeColours = () => {
-    //This function initializes the colors state when first entering the app
-    let colorArray = [];
+  //FUNCTIONS-------------------------------------------------------------------------------------------------
+  const calculateButtonClass = (buttonType) => {
+    //This function helps to build the class for the buttons
+    let buttonClass = 'button';
+    if (whiteBackground) {
+      buttonClass += ' buttonWhite';
+    } else if (blackBackground) {
+      buttonClass += ' buttonBlack';
+    }
+    if (buttonType === 'generateColorsBtn') {
+      buttonClass += ' generateColorsBtn';
+    }
+    if (buttonIsFullSize) {
+      buttonClass += ' buttonFullSize';
+    }
+    return buttonClass;
+  }
 
-    for (let i = 0; i < 5; i++) {
-      colorArray.push({
+  const generateRandomColor = () => {
+    //This helpter function generates a random color
+    let newColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    while (newColor.length < 7) {
+      newColor += '0';
+    }
+
+    //ensure no duplicate colors
+    while (colors.length > 0 && colors.includes(newColor)) {
+      newColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+      while (newColor.length < 7) {
+        newColor += '0';
+      }
+    }
+
+    return newColor;
+  }
+
+  const handleAddColor = () => {
+    //This function adds a color to the palette 
+    if (colors.length < 8) {
+      const newColor = {
         hex: generateRandomColor(),
         locked: false
-      });
+      }
+      setColors([...colors, newColor]);
+    } else {
+      alert('You can only have a maximum of 8 colors');
+    }
+  }
+
+  const handleColorChange = (index, newColor) => {
+    //This function handles the change from the color picker
+    setColors(prevColors => {
+      const updatedColors = [...prevColors];
+      updatedColors[index].hex = newColor.hex;
+      return updatedColors;
+    });
+  };
+
+  const handleDeleteColor = (color) => {
+    //This function deletes a color
+    const updatedColors = colors.filter(c => c.hex !== color.hex);
+    setColors(updatedColors);
+  }
+
+  const handleLockColor = (color) => {
+    //This function locks a color
+    const updatedColors = colors.map(c => {
+      if (c.hex === color.hex) {
+        return { ...c, locked: !c.locked }
+      }
+      return c;
+    });
+
+    setColors(updatedColors);
+  }
+
+  const handleRegenerationOfColors = () => {
+    //This function runs when the 'Generate Colors' button is clicked
+    let colorArray = [];
+
+    for (let i = 0; i < colors.length; i++) {
+      if (colors[i].locked) {
+        colorArray.push(colors[i]);
+      } else {
+        colorArray.push({
+          hex: generateRandomColor(),
+          locked: false
+        });
+      }
     }
 
     setColors(colorArray);
@@ -79,6 +163,7 @@ function App() {
       const buttons = document.getElementsByClassName('button');
       const infoContainer = document.getElementsByClassName('infoContainer');
 
+      //if the color container is less than 675px, change the layout
       if (colorWidth <= 675) {
         setIsSmall(true);
         colorSwatchContainer.classList.add('columnLayout');
@@ -110,99 +195,8 @@ function App() {
     }
   };
 
-  const handleAddColor = () => {
-    //This function adds a color to the palette 
-    if (colors.length < 8) {
-      const newColor = {
-        hex: generateRandomColor(),
-        locked: false
-      }
-      setColors([...colors, newColor]);
-    } else {
-      alert('You can only have a maximum of 8 colors');
-    }
-  }
-
-  const handleRegenerationOfColors = () => {
-    //This function runs when the 'Generate Colors' button is clicked
-    let colorArray = [];
-
-    for (let i = 0; i < colors.length; i++) {
-      if (colors[i].locked) {
-        colorArray.push(colors[i]);
-      } else {
-        colorArray.push({
-          hex: generateRandomColor(),
-          locked: false
-        });
-      }
-    }
-
-    setColors(colorArray);
-  }
-
-  const generateRandomColor = () => {
-    //This helpter function generates a random color
-    let newColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-    while (newColor.length < 7) {
-      newColor += '0';
-    }
-
-    //ensure no duplicate colors
-    while (colors.length > 0 && colors.includes(newColor)) {
-      newColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-      while (newColor.length < 7) {
-        newColor += '0';
-      }
-    }
-
-    return newColor;
-  }
-
-  const calculateButtonClass = (buttonType) => {
-    //This function helps to build the class for the buttons
-    let buttonClass = 'button';
-    if (whiteBackground) {
-      buttonClass += ' buttonWhite';
-    } else if (blackBackground) {
-      buttonClass += ' buttonBlack';
-    }
-    if (buttonType === 'generateColorsBtn') {
-      buttonClass += ' generateColorsBtn';
-    }
-    if (buttonIsFullSize) {
-      buttonClass += ' buttonFullSize';
-    }
-    return buttonClass;
-  }
-
-  const handleLockColor = (color) => {
-    //This function locks a color
-    const updatedColors = colors.map(c => {
-      if (c.hex === color.hex) {
-        return { ...c, locked: !c.locked }
-      }
-      return c;
-    });
-
-    setColors(updatedColors);
-  }
-
-  const handleDeleteColor = (color) => {
-    //This function deletes a color
-    const updatedColors = colors.filter(c => c.hex !== color.hex);
-    setColors(updatedColors);
-  }
-
-  const handleColorChange = (index, newColor) => {
-    setColors(prevColors => {
-      const updatedColors = [...prevColors];
-      updatedColors[index].hex = newColor.hex;
-      return updatedColors;
-    });
-  };
-
   const handleShowContrast = () => {
+    //This function shows the contrast checker
     if (showContrastAnimation === true) {
       setShowContrastAnimation(false);
     } else {
@@ -221,10 +215,28 @@ function App() {
     }
   }
 
+  const initializeColours = () => {
+    //This function initializes the colors state when first entering the app
+    let colorArray = [];
+
+    for (let i = 0; i < 5; i++) {
+      colorArray.push({
+        hex: generateRandomColor(),
+        locked: false
+      });
+    }
+
+    setColors(colorArray);
+  }
+
+  //RENDER---------------------------------------------------------------------------------------------------
   return (
     <div className="App">
       {(whiteBackground || blackBackground) ?
-        <div className='background' style={{ backgroundColor: whiteBackground ? 'white' : blackBackground ? 'black' : '' }}></div>
+        <div
+          className='background'
+          style={{ backgroundColor: whiteBackground ? 'white' : blackBackground ? 'black' : '' }}
+        />
         : null
       }
       <Navbar isDarkMode={isDarkMode} onToggleDarkMode={() => setIsDarkMode(!isDarkMode)} />
@@ -248,22 +260,30 @@ function App() {
         </div>
         <div className="btnContainer">
           <div className='topButtonsContainer'>
-            <button className={calculateButtonClass('generateColorsBtn')} onClick={handleRegenerationOfColors}>Generate Colors</button>
+            <button className={calculateButtonClass('generateColorsBtn')} onClick={handleRegenerationOfColors}>
+              Generate Colors
+            </button>
             <button className={calculateButtonClass()} onClick={handleAddColor}>Add Color</button>
             {!blackBackground ?
-              <button className={calculateButtonClass()} onClick={() => setWhiteBackground(!whiteBackground)}>See on White Background</button>
+              <button className={calculateButtonClass()} onClick={() => setWhiteBackground(!whiteBackground)}>
+                See on White Background
+              </button>
               :
               //placeholder to keep spacing
               <button className='button blank'>See on White Background</button>
             }
             {!whiteBackground ?
-              <button className={calculateButtonClass()} onClick={() => setBlackBackground(!blackBackground)}>See on Black Background</button>
+              <button className={calculateButtonClass()} onClick={() => setBlackBackground(!blackBackground)}>
+                See on Black Background
+              </button>
               :
               //placeholder to keep spacing
               <button className='button blank'>See on Black Background</button>
             }
           </div>
-          <button className='button buttonFullSize buttonLong' onClick={() => handleShowContrast()}>Check Contrast</button>
+          <button className='button buttonFullSize buttonLong' onClick={() => handleShowContrast()}>
+            Check Contrast
+          </button>
         </div>
         {showContrast ?
           <div className={`${isSmall ? 'mobile-container' : 'grid-container'} ${showContrastAnimation ? 'contrastAnimation' : ''}`}>

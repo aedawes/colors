@@ -8,8 +8,10 @@ import { mdiMoonWaningCrescent, mdiWhiteBalanceSunny } from '@mdi/js';
 
 export default function Navbar({ isDarkMode, onToggleDarkMode }) {
 
+    //VARIABLES------------------------------------------------------------------------------------------------------------------
     const sliderDarkModeClass = isDarkMode ? 'slider dark-toggle' : 'slider light-toggle';
 
+    //RENDER---------------------------------------------------------------------------------------------------------------------
     return (
         <nav>
             <h1>COLOR PICKER</h1>

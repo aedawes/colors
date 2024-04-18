@@ -6,11 +6,18 @@ import { calculateContrastRatio } from '../ColorContrast';
 import { SketchPicker } from 'react-color';
 
 export default function ColorSwatch({ color, isSmall, lockClick, deleteClick, showDelete, onColorChange, index, handleSwap }) {
+    //STATES---------------------------------------------------------------------------------------------------------------------
     const [showColorPicker, setShowColorPicker] = useState(false);
 
+    //REFS-----------------------------------------------------------------------------------------------------------------------
     const colorSwatchWidthRef = useRef(null);
     const colorPickerRef = useRef(null);
 
+    //VARIABLES------------------------------------------------------------------------------------------------------------------
+    const textColor = calculateContrastRatio(color.hex, '#ffffff') > 4.5 ? '#ffffff' : '#000000';
+    const deleteClass = showDelete ? 'icon' : 'icon disappear';
+
+    //EFFECTS--------------------------------------------------------------------------------------------------------------------
     useEffect(() => {
         function handleClickOutside(event) {
             //This function listens to see if there is a click outside of the color picker
@@ -32,6 +39,19 @@ export default function ColorSwatch({ color, isSmall, lockClick, deleteClick, sh
     }, [color]);
 
 
+    //FUNCTIONS------------------------------------------------------------------------------------------------------------------
+    const handleChangeComplete = (newColor) => {
+        onColorChange(newColor);
+    };
+
+    const handleClosePicker = () => {
+        setShowColorPicker(false);
+    };
+
+    const handleHexClick = () => {
+        setShowColorPicker(true);
+    };
+
     const handleResize = () => {
         //Moves the color and icons to a column if the screen is too small
         //in-between size
@@ -45,21 +65,7 @@ export default function ColorSwatch({ color, isSmall, lockClick, deleteClick, sh
         }
     };
 
-    const handleHexClick = () => {
-        setShowColorPicker(true);
-    };
-
-    const handleClosePicker = () => {
-        setShowColorPicker(false);
-    };
-
-    const handleChangeComplete = (newColor) => {
-        onColorChange(newColor);
-    };
-
-    const textColor = calculateContrastRatio(color.hex, '#ffffff') > 4.5 ? '#ffffff' : '#000000';
-    const deleteClass = showDelete ? 'icon' : 'icon disappear';
-
+    //RENDER---------------------------------------------------------------------------------------------------------------------
     return (
         <div className='colorContainer' style={{ backgroundColor: color.hex, color: textColor }}>
             {showColorPicker ?
