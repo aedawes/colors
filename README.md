@@ -37,7 +37,7 @@ The animations were mostly easy except for one. The animation for generating the
 
 The responsiveness probably took most of the time. I mentioned the bulk of it up above, but I am very happy with the way it turned out and how it looks on mobile. I did not specifically account for the use of an ipad but since it accounted for as much screen size as I felt necessary on a web browser and mobile it ended up still looking great on ipad too!
 
-## conclusion
+## Conclusion
 This was a very fun project and I was glad to complete it. I feel that it will be very useful for my portfolio and was a fun challenge. Hopefully once I get my personal site up and running, I will be able to host it to use for my own purposes and keep iterating on it!
 
 ### Link to video: https://byu.box.com/s/xv515f1z4nmtkc6osn75l69gpjqa934e
