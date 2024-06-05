@@ -40,6 +40,6 @@ The responsiveness probably took most of the time. I mentioned the bulk of it up
 ## Conclusion
 This was a very fun project and I was glad to complete it. I feel that it will be very useful for my portfolio and was a fun challenge. Hopefully once I get my personal site up and running, I will be able to host it to use for my own purposes and keep iterating on it!
 
-### Link to video: https://byu.box.com/s/xv515f1z4nmtkc6osn75l69gpjqa934e
+### Link to full video walkthrough: https://byu.box.com/s/xv515f1z4nmtkc6osn75l69gpjqa934e
 
 ### Link to Github repo: https://github.com/aedawes/colors.git
